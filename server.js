@@ -13,8 +13,12 @@ app.use(bodyParser.json());
 const router = express.Router();
 const MISSING_ID_ERROR_MESSAGE = 'Person ID parameter required.';
 
-async function getPeople() {
-  const people = await db.collection('people').find().sort({ last_name: 1 }).toArray();
+async function getPeople(req) {
+  const searchQuery = {};
+  if (req.query.filter) searchQuery.type = req.query.filter;
+  if (req.query.firstName) searchQuery.first_name = req.query.firstName;
+  if (req.query.lastName) searchQuery.last_name = req.query.lastName;
+  const people = await db.collection('people').find(searchQuery).sort({ last_name: 1 }).toArray();
   return people;
 }
 
@@ -41,7 +45,7 @@ async function deletePerson(personId) {
 
 router.get('/people', async (req, res, next) => {
   try {
-    const people = await getPeople();
+    const people = await getPeople(req);
     res.json(people);
   } catch(err) {
     next(err);

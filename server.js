@@ -107,7 +107,7 @@ router.delete('/people/:id', async (req, res, next) => {
 });
 
 router.use(function (req, res) {
-  res.status(404).send("Route not found!");
+  res.status(404).send('Route not found!');
 });
 
 app.use('/api', router);

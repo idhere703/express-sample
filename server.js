@@ -43,6 +43,13 @@ async function deletePerson(personId) {
   return deleteResponse;
 }
 
+/**
+  * @desc Get's a list of all people currently in the database.
+  * @param string filter - An optional query parameter for filtering based on type.
+  * @param string firstName - An optional query parameter for searching based on first name.
+  * @param string lastName - An optional query parameter for searching based on last name.
+  * @return Array - An array of JSON objects.
+*/
 router.get('/people', async (req, res, next) => {
   try {
     const people = await getPeople(req);
@@ -52,6 +59,11 @@ router.get('/people', async (req, res, next) => {
   }
 });
 
+/**
+  * @desc Get's a specific person from the people collection when passed a mongoid as a string.
+  * @param string id - A mongodb object id as a string.
+  * @return object - A JSON object of that particular person.
+*/
 router.get('/people/:id', async (req, res, next) => {
   if (typeof req.params.id !== 'string') return res.status(400).send(MISSING_ID_ERROR_MESSAGE);
   try {
@@ -62,6 +74,16 @@ router.get('/people/:id', async (req, res, next) => {
   }
 });
 
+/**
+  * @desc Creates a new person.
+  * @param string req.body.first_name - A users first name.
+  * @param string req.body.last_name - A users last name.
+  * @param string req.body.email - A users email.
+  * @param string req.body.type - One of several options as text. Case does matter.
+  * @param string req.body.sex - One of several options as text. Case does matter.
+  * @param string req.body.birthdate - A string passed in the format of: MM/DD/YYYY
+  * @return Object - The newly created person as a JSON object.
+*/
 router.post('/people', async (req, res, next) => {
   let person;
   try {
@@ -78,6 +100,17 @@ router.post('/people', async (req, res, next) => {
   }
 });
 
+/**
+  * @desc Updates an existing person.
+  * @param string id - A mongodb object id as a string.
+  * @param string req.body.first_name - A users first name.
+  * @param string req.body.last_name - A users last name.
+  * @param string req.body.email - A users email.
+  * @param string req.body.type - One of several options as text. Case does matter.
+  * @param string req.body.sex - One of several options as text. Case does matter.
+  * @param string req.body.birthdate - A string passed in the format of: MM/DD/YYYY
+  * @return Object - The persons updated information as a JSON object.
+*/
 router.put('/people/:id', async (req, res) => {
   if (typeof req.params.id !== 'string') return res.status(400).send(MISSING_ID_ERROR_MESSAGE);
   let person;
@@ -96,6 +129,11 @@ router.put('/people/:id', async (req, res) => {
   }
 });
 
+/**
+  * @desc Deletes and existing person.
+  * @param string id - A mongodb object id as a string.
+  * @return null
+*/
 router.delete('/people/:id', async (req, res, next) => {
   if (typeof req.params.id !== 'string') return res.status(400).send(MISSING_ID_ERROR_MESSAGE);
   try {
